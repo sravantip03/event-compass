@@ -91,9 +91,9 @@ function Profile() {
       <Card className="p-6 mb-6">
         <h2 className="text-lg font-semibold mb-1">For better recommendations</h2>
         <p className="text-sm text-muted-foreground mb-4">Add skills, interests, and preferred cities. The AI uses these to match events.</p>
-        <TagField label="Skills" tags={form.skills ?? []} onAdd={(v) => addTag("skills", v, setSkillInput)} onRemove={(i) => removeTag("skills", i)} input={skillInput} setInput={setSkillInput} placeholder="Python, ML, Web Dev" />
-        <TagField label="Interests" tags={form.interests ?? []} onAdd={(v) => addTag("interests", v, setInterestInput)} onRemove={(i) => removeTag("interests", i)} input={interestInput} setInput={setInterestInput} placeholder="AI, Blockchain, Design" />
-        <TagField label="Preferred cities" tags={form.preferred_locations ?? []} onAdd={(v) => addTag("preferred_locations", v, setLocInput)} onRemove={(i) => removeTag("preferred_locations", i)} input={locInput} setInput={setLocInput} placeholder="Bangalore, Mumbai" />
+        <TagField label="Skills" tags={form.skills ?? []} onAdd={(v: string) => addTag("skills", v, setSkillInput)} onRemove={(i: number) => removeTag("skills", i)} input={skillInput} setInput={setSkillInput} placeholder="Python, ML, Web Dev" />
+        <TagField label="Interests" tags={form.interests ?? []} onAdd={(v: string) => addTag("interests", v, setInterestInput)} onRemove={(i: number) => removeTag("interests", i)} input={interestInput} setInput={setInterestInput} placeholder="AI, Blockchain, Design" />
+        <TagField label="Preferred cities" tags={form.preferred_locations ?? []} onAdd={(v: string) => addTag("preferred_locations", v, setLocInput)} onRemove={(i: number) => removeTag("preferred_locations", i)} input={locInput} setInput={setLocInput} placeholder="Bangalore, Mumbai" />
       </Card>
 
       <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="bg-gradient-brand text-white">
