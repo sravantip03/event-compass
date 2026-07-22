@@ -14,16 +14,362 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      applied_events: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applied_events_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      badges: {
+        Row: {
+          code: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          xp_reward: number
+        }
+        Insert: {
+          code: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          xp_reward?: number
+        }
+        Update: {
+          code?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          xp_reward?: number
+        }
+        Relationships: []
+      }
+      certificates: {
+        Row: {
+          created_at: string
+          event_id: string | null
+          file_url: string | null
+          id: string
+          issue_date: string | null
+          issuer: string | null
+          title: string
+          user_id: string
+          verification_code: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id?: string | null
+          file_url?: string | null
+          id?: string
+          issue_date?: string | null
+          issuer?: string | null
+          title: string
+          user_id: string
+          verification_code?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string | null
+          file_url?: string | null
+          id?: string
+          issue_date?: string | null
+          issuer?: string | null
+          title?: string
+          user_id?: string
+          verification_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          branch_tags: string[]
+          city: string | null
+          college: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          difficulty: string | null
+          end_date: string | null
+          event_type: string
+          id: string
+          image_url: string | null
+          is_approved: boolean
+          is_featured: boolean
+          is_free: boolean
+          latitude: number | null
+          longitude: number | null
+          mode: string
+          official_website: string | null
+          organizer: string
+          popularity: number
+          price: number | null
+          prize_pool: number | null
+          registration_deadline: string | null
+          registration_url: string
+          seats_left: number | null
+          short_description: string | null
+          slug: string
+          start_date: string
+          state: string | null
+          tech_tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          branch_tags?: string[]
+          city?: string | null
+          college?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          description: string
+          difficulty?: string | null
+          end_date?: string | null
+          event_type: string
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          is_featured?: boolean
+          is_free?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          mode: string
+          official_website?: string | null
+          organizer: string
+          popularity?: number
+          price?: number | null
+          prize_pool?: number | null
+          registration_deadline?: string | null
+          registration_url: string
+          seats_left?: number | null
+          short_description?: string | null
+          slug: string
+          start_date: string
+          state?: string | null
+          tech_tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          branch_tags?: string[]
+          city?: string | null
+          college?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          difficulty?: string | null
+          end_date?: string | null
+          event_type?: string
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          is_featured?: boolean
+          is_free?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          mode?: string
+          official_website?: string | null
+          organizer?: string
+          popularity?: number
+          price?: number | null
+          prize_pool?: number | null
+          registration_deadline?: string | null
+          registration_url?: string
+          seats_left?: number | null
+          short_description?: string | null
+          slug?: string
+          start_date?: string
+          state?: string | null
+          tech_tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          branch: string | null
+          college: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          github_url: string | null
+          id: string
+          interests: string[]
+          linkedin_url: string | null
+          preferred_locations: string[]
+          skills: string[]
+          updated_at: string
+          xp_points: number
+          year: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          branch?: string | null
+          college?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          github_url?: string | null
+          id: string
+          interests?: string[]
+          linkedin_url?: string | null
+          preferred_locations?: string[]
+          skills?: string[]
+          updated_at?: string
+          xp_points?: number
+          year?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          branch?: string | null
+          college?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          github_url?: string | null
+          id?: string
+          interests?: string[]
+          linkedin_url?: string | null
+          preferred_locations?: string[]
+          skills?: string[]
+          updated_at?: string
+          xp_points?: number
+          year?: string | null
+        }
+        Relationships: []
+      }
+      saved_events: {
+        Row: {
+          created_at: string
+          event_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_events_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +496,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
