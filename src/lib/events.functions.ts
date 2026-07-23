@@ -41,6 +41,26 @@ export const getEventBySlug = createServerFn({ method: "GET" })
     return ev;
   });
 
+export const getRelatedEvents = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => d)
+  .handler(async ({ data }) => {
+    const sb = serverPublic();
+    const { data: current } = await sb.from("events").select("*").eq("slug", data.slug).maybeSingle();
+    if (!current) return [];
+    const { data: all } = await sb.from("events").select("*").eq("is_approved", true).neq("id", current.id);
+    const list = all ?? [];
+    const tags = new Set([...(current.tech_tags ?? []), ...(current.branch_tags ?? [])].map((t) => t.toLowerCase()));
+    const scored = list.map((e) => {
+      const et = new Set([...(e.tech_tags ?? []), ...(e.branch_tags ?? [])].map((t) => t.toLowerCase()));
+      let overlap = 0;
+      tags.forEach((t) => { if (et.has(t)) overlap++; });
+      const typeBoost = e.event_type === current.event_type ? 1 : 0;
+      const cityBoost = e.city && e.city === current.city ? 0.5 : 0;
+      return { event: e, score: overlap + typeBoost + cityBoost };
+    }).sort((a, b) => b.score - a.score).slice(0, 6).map((s) => s.event);
+    return scored;
+  });
+
 export const getMyDashboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -49,7 +69,7 @@ export const getMyDashboard = createServerFn({ method: "GET" })
       supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
       supabase.from("saved_events").select("event_id, events(*)").eq("user_id", userId),
       supabase.from("applied_events").select("*, events(*)").eq("user_id", userId).order("created_at", { ascending: false }),
-      supabase.from("certificates").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+      supabase.from("certificates").select("*, events(title, event_type, organizer)").eq("user_id", userId).order("created_at", { ascending: false }),
       supabase.from("user_badges").select("*, badges(*)").eq("user_id", userId),
     ]);
     return {
@@ -59,6 +79,39 @@ export const getMyDashboard = createServerFn({ method: "GET" })
       certificates: certs.data ?? [],
       badges: badges.data ?? [],
     };
+  });
+
+export const getMyHistory = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data: applied } = await supabase
+      .from("applied_events")
+      .select("*, events(*)")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    const now = new Date().toISOString();
+    // An event is attended if status='attended' OR its end_date/start_date has passed
+    const rows = (applied ?? []).filter((r: any) => {
+      if (r.status === "attended") return true;
+      const e = r.events;
+      if (!e) return false;
+      const end = e.end_date || e.start_date;
+      return end && end < now;
+    });
+    return rows;
+  });
+
+export const getAllBadges = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const [{ data: all }, { data: owned }] = await Promise.all([
+      supabase.from("badges").select("*"),
+      supabase.from("user_badges").select("*").eq("user_id", userId),
+    ]);
+    const ownedMap = new Map((owned ?? []).map((u: any) => [u.badge_id, u]));
+    return (all ?? []).map((b: any) => ({ ...b, unlocked: ownedMap.has(b.id), unlocked_at: ownedMap.get(b.id)?.created_at ?? null }));
   });
 
 export const toggleSaveEvent = createServerFn({ method: "POST" })
@@ -81,12 +134,10 @@ export const applyToEvent = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     await supabase.from("applied_events").upsert({ user_id: userId, event_id: data.eventId, status: "applied" }, { onConflict: "user_id,event_id" });
-    // Award XP + badges
     const { data: profile } = await supabase.from("profiles").select("xp_points").eq("id", userId).maybeSingle();
     const newXp = (profile?.xp_points ?? 0) + 10;
     await supabase.from("profiles").update({ xp_points: newXp }).eq("id", userId);
 
-    // Auto-award badges
     const { data: appliedList } = await supabase.from("applied_events").select("event_id, events(event_type)").eq("user_id", userId);
     const count = appliedList?.length ?? 0;
     const hackCount = (appliedList ?? []).filter((a: any) => a.events?.event_type === "Hackathon").length;
@@ -102,6 +153,21 @@ export const applyToEvent = createServerFn({ method: "POST" })
       const { data: badge } = await supabase.from("badges").select("id").eq("code", code).maybeSingle();
       if (badge) await supabase.from("user_badges").upsert({ user_id: userId, badge_id: badge.id }, { onConflict: "user_id,badge_id" });
     }
+    return { ok: true, xp: newXp };
+  });
+
+export const markAttended = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { eventId: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    await supabase.from("applied_events").upsert(
+      { user_id: userId, event_id: data.eventId, status: "attended" },
+      { onConflict: "user_id,event_id" }
+    );
+    const { data: profile } = await supabase.from("profiles").select("xp_points").eq("id", userId).maybeSingle();
+    const newXp = (profile?.xp_points ?? 0) + 25;
+    await supabase.from("profiles").update({ xp_points: newXp }).eq("id", userId);
     return { ok: true, xp: newXp };
   });
 
@@ -122,7 +188,6 @@ export const addCertificate = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
     const { error } = await supabase.from("certificates").insert({ ...data, user_id: userId });
     if (error) throw new Error(error.message);
-    // Top learner badge
     const { count } = await supabase.from("certificates").select("*", { count: "exact", head: true }).eq("user_id", userId);
     if ((count ?? 0) >= 3) {
       const { data: b } = await supabase.from("badges").select("id").eq("code", "top_learner").maybeSingle();
