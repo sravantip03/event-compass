@@ -25,6 +25,9 @@ export function Navbar() {
     <>
       <Link to="/events" className="text-sm font-medium hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Events</Link>
       {user && <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Dashboard</Link>}
+      {user && <Link to="/attended" className="text-sm font-medium hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>History</Link>}
+      {user && <Link to="/certificates" className="text-sm font-medium hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Certificates</Link>}
+      {user && <Link to="/badges" className="text-sm font-medium hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Badges</Link>}
       {user && <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Profile</Link>}
     </>
   );

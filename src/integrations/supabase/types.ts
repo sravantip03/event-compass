@@ -120,108 +120,174 @@ export type Database = {
       events: {
         Row: {
           branch_tags: string[]
+          brochure_url: string | null
+          category: string | null
+          certificate_date: string | null
           city: string | null
           college: string | null
+          contact_email: string | null
           country: string | null
           created_at: string
           created_by: string | null
           description: string
           difficulty: string | null
+          discord_url: string | null
+          eligibility: string | null
           end_date: string | null
           event_type: string
+          goodies: string | null
           id: string
           image_url: string | null
+          instagram_url: string | null
           is_approved: boolean
           is_featured: boolean
           is_free: boolean
           latitude: number | null
+          linkedin_url: string | null
+          logo_url: string | null
           longitude: number | null
           mode: string
           official_website: string | null
           organizer: string
+          phone: string | null
           popularity: number
+          prerequisites: string | null
           price: number | null
           prize_pool: number | null
+          problem_statement_url: string | null
           registration_deadline: string | null
+          registration_opens_at: string | null
           registration_url: string
+          result_date: string | null
+          rulebook_url: string | null
+          schedule_url: string | null
           seats_left: number | null
           short_description: string | null
           slug: string
           start_date: string
           state: string | null
+          status: string | null
           tech_tags: string[]
+          theme: string | null
           title: string
+          travel_support: string | null
           updated_at: string
+          venue_address: string | null
+          venue_name: string | null
         }
         Insert: {
           branch_tags?: string[]
+          brochure_url?: string | null
+          category?: string | null
+          certificate_date?: string | null
           city?: string | null
           college?: string | null
+          contact_email?: string | null
           country?: string | null
           created_at?: string
           created_by?: string | null
           description: string
           difficulty?: string | null
+          discord_url?: string | null
+          eligibility?: string | null
           end_date?: string | null
           event_type: string
+          goodies?: string | null
           id?: string
           image_url?: string | null
+          instagram_url?: string | null
           is_approved?: boolean
           is_featured?: boolean
           is_free?: boolean
           latitude?: number | null
+          linkedin_url?: string | null
+          logo_url?: string | null
           longitude?: number | null
           mode: string
           official_website?: string | null
           organizer: string
+          phone?: string | null
           popularity?: number
+          prerequisites?: string | null
           price?: number | null
           prize_pool?: number | null
+          problem_statement_url?: string | null
           registration_deadline?: string | null
+          registration_opens_at?: string | null
           registration_url: string
+          result_date?: string | null
+          rulebook_url?: string | null
+          schedule_url?: string | null
           seats_left?: number | null
           short_description?: string | null
           slug: string
           start_date: string
           state?: string | null
+          status?: string | null
           tech_tags?: string[]
+          theme?: string | null
           title: string
+          travel_support?: string | null
           updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
         }
         Update: {
           branch_tags?: string[]
+          brochure_url?: string | null
+          category?: string | null
+          certificate_date?: string | null
           city?: string | null
           college?: string | null
+          contact_email?: string | null
           country?: string | null
           created_at?: string
           created_by?: string | null
           description?: string
           difficulty?: string | null
+          discord_url?: string | null
+          eligibility?: string | null
           end_date?: string | null
           event_type?: string
+          goodies?: string | null
           id?: string
           image_url?: string | null
+          instagram_url?: string | null
           is_approved?: boolean
           is_featured?: boolean
           is_free?: boolean
           latitude?: number | null
+          linkedin_url?: string | null
+          logo_url?: string | null
           longitude?: number | null
           mode?: string
           official_website?: string | null
           organizer?: string
+          phone?: string | null
           popularity?: number
+          prerequisites?: string | null
           price?: number | null
           prize_pool?: number | null
+          problem_statement_url?: string | null
           registration_deadline?: string | null
+          registration_opens_at?: string | null
           registration_url?: string
+          result_date?: string | null
+          rulebook_url?: string | null
+          schedule_url?: string | null
           seats_left?: number | null
           short_description?: string | null
           slug?: string
           start_date?: string
           state?: string | null
+          status?: string | null
           tech_tags?: string[]
+          theme?: string | null
           title?: string
+          travel_support?: string | null
           updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
         }
         Relationships: []
       }
