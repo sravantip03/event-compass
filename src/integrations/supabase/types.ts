@@ -14,6 +14,151 @@ export type Database = {
   }
   public: {
     Tables: {
+      application_status_history: {
+        Row: {
+          application_id: string
+          created_at: string
+          id: string
+          note: string | null
+          status: Database["public"]["Enums"]["app_status"]
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          status: Database["public"]["Enums"]["app_status"]
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          status?: Database["public"]["Enums"]["app_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_status_history_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      applications: {
+        Row: {
+          agreed_terms: boolean
+          amount: number
+          answers: Json | null
+          application_number: string
+          attended: boolean
+          branch: string | null
+          college: string | null
+          created_at: string
+          email: string
+          event_id: string
+          experience_level: string | null
+          full_name: string
+          gender: string | null
+          github_url: string | null
+          id: string
+          languages: string[] | null
+          linkedin_url: string | null
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          phone: string | null
+          portfolio_url: string | null
+          resume_url: string | null
+          roll_number: string | null
+          skills: string[] | null
+          status: Database["public"]["Enums"]["app_status"]
+          team_members: Json | null
+          team_name: string | null
+          team_size: number | null
+          university: string | null
+          updated_at: string
+          user_id: string
+          xp_earned: number
+          year: string | null
+        }
+        Insert: {
+          agreed_terms?: boolean
+          amount?: number
+          answers?: Json | null
+          application_number?: string
+          attended?: boolean
+          branch?: string | null
+          college?: string | null
+          created_at?: string
+          email: string
+          event_id: string
+          experience_level?: string | null
+          full_name: string
+          gender?: string | null
+          github_url?: string | null
+          id?: string
+          languages?: string[] | null
+          linkedin_url?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone?: string | null
+          portfolio_url?: string | null
+          resume_url?: string | null
+          roll_number?: string | null
+          skills?: string[] | null
+          status?: Database["public"]["Enums"]["app_status"]
+          team_members?: Json | null
+          team_name?: string | null
+          team_size?: number | null
+          university?: string | null
+          updated_at?: string
+          user_id: string
+          xp_earned?: number
+          year?: string | null
+        }
+        Update: {
+          agreed_terms?: boolean
+          amount?: number
+          answers?: Json | null
+          application_number?: string
+          attended?: boolean
+          branch?: string | null
+          college?: string | null
+          created_at?: string
+          email?: string
+          event_id?: string
+          experience_level?: string | null
+          full_name?: string
+          gender?: string | null
+          github_url?: string | null
+          id?: string
+          languages?: string[] | null
+          linkedin_url?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone?: string | null
+          portfolio_url?: string | null
+          resume_url?: string | null
+          roll_number?: string | null
+          skills?: string[] | null
+          status?: Database["public"]["Enums"]["app_status"]
+          team_members?: Json | null
+          team_name?: string | null
+          team_size?: number | null
+          university?: string | null
+          updated_at?: string
+          user_id?: string
+          xp_earned?: number
+          year?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       applied_events: {
         Row: {
           created_at: string
@@ -117,6 +262,47 @@ export type Database = {
           },
         ]
       }
+      event_questions: {
+        Row: {
+          created_at: string
+          event_id: string
+          field_type: string
+          id: string
+          label: string
+          options: string[] | null
+          required: boolean
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          field_type?: string
+          id?: string
+          label: string
+          options?: string[] | null
+          required?: boolean
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          field_type?: string
+          id?: string
+          label?: string
+          options?: string[] | null
+          required?: boolean
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_questions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           branch_tags: string[]
@@ -142,10 +328,14 @@ export type Database = {
           is_approved: boolean
           is_featured: boolean
           is_free: boolean
+          is_team_based: boolean
           latitude: number | null
           linkedin_url: string | null
           logo_url: string | null
           longitude: number | null
+          max_seats: number | null
+          max_team_size: number | null
+          min_team_size: number | null
           mode: string
           official_website: string | null
           organizer: string
@@ -155,8 +345,10 @@ export type Database = {
           price: number | null
           prize_pool: number | null
           problem_statement_url: string | null
+          registered_count: number
           registration_deadline: string | null
           registration_opens_at: string | null
+          registration_type: string
           registration_url: string
           result_date: string | null
           rulebook_url: string | null
@@ -199,10 +391,14 @@ export type Database = {
           is_approved?: boolean
           is_featured?: boolean
           is_free?: boolean
+          is_team_based?: boolean
           latitude?: number | null
           linkedin_url?: string | null
           logo_url?: string | null
           longitude?: number | null
+          max_seats?: number | null
+          max_team_size?: number | null
+          min_team_size?: number | null
           mode: string
           official_website?: string | null
           organizer: string
@@ -212,8 +408,10 @@ export type Database = {
           price?: number | null
           prize_pool?: number | null
           problem_statement_url?: string | null
+          registered_count?: number
           registration_deadline?: string | null
           registration_opens_at?: string | null
+          registration_type?: string
           registration_url: string
           result_date?: string | null
           rulebook_url?: string | null
@@ -256,10 +454,14 @@ export type Database = {
           is_approved?: boolean
           is_featured?: boolean
           is_free?: boolean
+          is_team_based?: boolean
           latitude?: number | null
           linkedin_url?: string | null
           logo_url?: string | null
           longitude?: number | null
+          max_seats?: number | null
+          max_team_size?: number | null
+          min_team_size?: number | null
           mode?: string
           official_website?: string | null
           organizer?: string
@@ -269,8 +471,10 @@ export type Database = {
           price?: number | null
           prize_pool?: number | null
           problem_statement_url?: string | null
+          registered_count?: number
           registration_deadline?: string | null
           registration_opens_at?: string | null
+          registration_type?: string
           registration_url?: string
           result_date?: string | null
           rulebook_url?: string | null
@@ -290,6 +494,56 @@ export type Database = {
           venue_name?: string | null
         }
         Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          application_id: string
+          created_at: string
+          id: string
+          invoice_number: string
+          method: string
+          order_id: string
+          paid_at: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          transaction_id: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          application_id: string
+          created_at?: string
+          id?: string
+          invoice_number?: string
+          method: string
+          order_id?: string
+          paid_at?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          transaction_id?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          application_id?: string
+          created_at?: string
+          id?: string
+          invoice_number?: string
+          method?: string
+          order_id?: string
+          paid_at?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          transaction_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -436,6 +690,21 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      app_status:
+        | "pending"
+        | "submitted"
+        | "under_review"
+        | "shortlisted"
+        | "accepted"
+        | "rejected"
+        | "completed"
+        | "waitlisted"
+      payment_status:
+        | "not_required"
+        | "pending"
+        | "paid"
+        | "failed"
+        | "refunded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -564,6 +833,17 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      app_status: [
+        "pending",
+        "submitted",
+        "under_review",
+        "shortlisted",
+        "accepted",
+        "rejected",
+        "completed",
+        "waitlisted",
+      ],
+      payment_status: ["not_required", "pending", "paid", "failed", "refunded"],
     },
   },
 } as const

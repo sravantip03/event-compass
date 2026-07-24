@@ -1,6 +1,6 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEventBySlug, getRelatedEvents, toggleSaveEvent, applyToEvent, markAttended } from "@/lib/events.functions";
+import { getEventBySlug, getRelatedEvents, toggleSaveEvent, markAttended } from "@/lib/events.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -96,7 +96,7 @@ function EventDetail() {
   const [userId, setUserId] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const saveFn = useServerFn(toggleSaveEvent);
-  const applyFn = useServerFn(applyToEvent);
+  
   const attendFn = useServerFn(markAttended);
 
   useEffect(() => {
@@ -114,11 +114,8 @@ function EventDetail() {
     onSuccess: (r) => { setSaved(r.saved); toast.success(r.saved ? "Event saved" : "Removed"); },
     onError: () => toast.error("Sign in to save events"),
   });
-  const applyMut = useMutation({
-    mutationFn: () => applyFn({ data: { eventId: e!.id } }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["dashboard"] }); toast.success("Marked as applied — +10 XP earned!"); },
-    onError: () => toast.error("Sign in to apply"),
-  });
+
+
   const attendMut = useMutation({
     mutationFn: () => attendFn({ data: { eventId: e!.id } }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["dashboard"] }); qc.invalidateQueries({ queryKey: ["history"] }); toast.success("Marked as attended — +25 XP!"); },
@@ -129,9 +126,10 @@ function EventDetail() {
   const status = computeStatus(e);
   const eventEnded = isPast(new Date(e.end_date ?? e.start_date));
 
+  const navigate = useNavigate();
   const handleApply = () => {
-    if (userId) applyMut.mutate();
-    window.open(e.registration_url, "_blank", "noopener,noreferrer");
+    if (!userId) { navigate({ to: "/auth" }); return; }
+    navigate({ to: "/events/$slug/apply", params: { slug: e.slug } });
   };
 
   const copyRegLink = () => {
