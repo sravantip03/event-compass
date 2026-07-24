@@ -21,6 +21,8 @@ import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authent
 import { Route as AuthenticatedBadgesRouteImport } from './routes/_authenticated/badges'
 import { Route as AuthenticatedAttendedRouteImport } from './routes/_authenticated/attended'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedPaymentApplicationIdRouteImport } from './routes/_authenticated/payment.$applicationId'
+import { Route as AuthenticatedApplicationIdRouteImport } from './routes/_authenticated/application.$id'
 import { Route as AuthenticatedEventsSlugApplyRouteImport } from './routes/_authenticated/events.$slug.apply'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -83,6 +85,18 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPaymentApplicationIdRoute =
+  AuthenticatedPaymentApplicationIdRouteImport.update({
+    id: '/payment/$applicationId',
+    path: '/payment/$applicationId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedApplicationIdRoute =
+  AuthenticatedApplicationIdRouteImport.update({
+    id: '/application/$id',
+    path: '/application/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEventsSlugApplyRoute =
   AuthenticatedEventsSlugApplyRouteImport.update({
     id: '/events/$slug/apply',
@@ -102,6 +116,8 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events/': typeof EventsIndexRoute
+  '/application/$id': typeof AuthenticatedApplicationIdRoute
+  '/payment/$applicationId': typeof AuthenticatedPaymentApplicationIdRoute
   '/events/$slug/apply': typeof AuthenticatedEventsSlugApplyRoute
 }
 export interface FileRoutesByTo {
@@ -116,6 +132,8 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events': typeof EventsIndexRoute
+  '/application/$id': typeof AuthenticatedApplicationIdRoute
+  '/payment/$applicationId': typeof AuthenticatedPaymentApplicationIdRoute
   '/events/$slug/apply': typeof AuthenticatedEventsSlugApplyRoute
 }
 export interface FileRoutesById {
@@ -132,6 +150,8 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/events/$slug': typeof EventsSlugRoute
   '/events/': typeof EventsIndexRoute
+  '/_authenticated/application/$id': typeof AuthenticatedApplicationIdRoute
+  '/_authenticated/payment/$applicationId': typeof AuthenticatedPaymentApplicationIdRoute
   '/_authenticated/events/$slug/apply': typeof AuthenticatedEventsSlugApplyRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +168,8 @@ export interface FileRouteTypes {
     | '/profile'
     | '/events/$slug'
     | '/events/'
+    | '/application/$id'
+    | '/payment/$applicationId'
     | '/events/$slug/apply'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -162,6 +184,8 @@ export interface FileRouteTypes {
     | '/profile'
     | '/events/$slug'
     | '/events'
+    | '/application/$id'
+    | '/payment/$applicationId'
     | '/events/$slug/apply'
   id:
     | '__root__'
@@ -177,6 +201,8 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/events/$slug'
     | '/events/'
+    | '/_authenticated/application/$id'
+    | '/_authenticated/payment/$applicationId'
     | '/_authenticated/events/$slug/apply'
   fileRoutesById: FileRoutesById
 }
@@ -275,6 +301,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/payment/$applicationId': {
+      id: '/_authenticated/payment/$applicationId'
+      path: '/payment/$applicationId'
+      fullPath: '/payment/$applicationId'
+      preLoaderRoute: typeof AuthenticatedPaymentApplicationIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/application/$id': {
+      id: '/_authenticated/application/$id'
+      path: '/application/$id'
+      fullPath: '/application/$id'
+      preLoaderRoute: typeof AuthenticatedApplicationIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/events/$slug/apply': {
       id: '/_authenticated/events/$slug/apply'
       path: '/events/$slug/apply'
@@ -292,6 +332,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedApplicationIdRoute: typeof AuthenticatedApplicationIdRoute
+  AuthenticatedPaymentApplicationIdRoute: typeof AuthenticatedPaymentApplicationIdRoute
   AuthenticatedEventsSlugApplyRoute: typeof AuthenticatedEventsSlugApplyRoute
 }
 
@@ -302,6 +344,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedApplicationIdRoute: AuthenticatedApplicationIdRoute,
+  AuthenticatedPaymentApplicationIdRoute:
+    AuthenticatedPaymentApplicationIdRoute,
   AuthenticatedEventsSlugApplyRoute: AuthenticatedEventsSlugApplyRoute,
 }
 

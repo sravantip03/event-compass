@@ -129,9 +129,10 @@ function EventDetail() {
   const status = computeStatus(e);
   const eventEnded = isPast(new Date(e.end_date ?? e.start_date));
 
+  const navigate = useNavigate();
   const handleApply = () => {
-    if (userId) applyMut.mutate();
-    window.open(e.registration_url, "_blank", "noopener,noreferrer");
+    if (!userId) { navigate({ to: "/auth" }); return; }
+    navigate({ to: "/events/$slug/apply", params: { slug: e.slug } });
   };
 
   const copyRegLink = () => {
