@@ -12,7 +12,7 @@ import { z } from "zod";
 const searchSchema = z.object({ q: z.string().optional() });
 const allQuery = queryOptions({ queryKey: ["events", "all"], queryFn: () => listEvents() });
 
-export const Route = createFileRoute("/events")({
+export const Route = createFileRoute("/events/")({
   head: () => ({
     meta: [
       { title: "Browse Events — EventCompass AI" },
