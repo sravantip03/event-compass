@@ -96,7 +96,7 @@ function EventDetail() {
   const [userId, setUserId] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const saveFn = useServerFn(toggleSaveEvent);
-  const applyFn = useServerFn(applyToEvent);
+  
   const attendFn = useServerFn(markAttended);
 
   useEffect(() => {
@@ -114,11 +114,8 @@ function EventDetail() {
     onSuccess: (r) => { setSaved(r.saved); toast.success(r.saved ? "Event saved" : "Removed"); },
     onError: () => toast.error("Sign in to save events"),
   });
-  const applyMut = useMutation({
-    mutationFn: () => applyFn({ data: { eventId: e!.id } }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["dashboard"] }); toast.success("Marked as applied — +10 XP earned!"); },
-    onError: () => toast.error("Sign in to apply"),
-  });
+
+
   const attendMut = useMutation({
     mutationFn: () => attendFn({ data: { eventId: e!.id } }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["dashboard"] }); qc.invalidateQueries({ queryKey: ["history"] }); toast.success("Marked as attended — +25 XP!"); },
